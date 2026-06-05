@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+venv/
+env/
+.env/
+.venv/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb~
+
+# Data (too large for git — use DVC or direct download)
+data/raw/
+data/processed/*.npz
+data/processed/*.nc
+
+# Model checkpoints (large binary files)
+models/checkpoints/*.pt
+models/checkpoints/*.pth
+models/results/*.npy
+
+# Logs
+logs/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Streamlit
+.streamlit/
+
+# API keys
+.env
+*.env
+cdsapirc

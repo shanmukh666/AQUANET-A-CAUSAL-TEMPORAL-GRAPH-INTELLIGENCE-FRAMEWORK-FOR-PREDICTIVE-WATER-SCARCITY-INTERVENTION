@@ -1,0 +1,60 @@
+# AquaIntel — Python Dependencies
+# Python 3.13/3.14 + Windows CPU-safe (no C++ compiler needed)
+# Install: pip install -r requirements.txt
+
+# ── Core scientific stack ─────────────────────────────────────────────────────
+numpy>=1.24.0
+pandas>=2.0.0
+scipy>=1.11.0
+xarray>=2023.6.0
+h5py>=3.9.0
+
+# ── ML & Deep Learning ────────────────────────────────────────────────────────
+# Install torch FIRST with:
+#   pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+torch>=2.1.0
+torchvision>=0.16.0
+torch-geometric>=2.4.0
+einops>=0.7.0
+
+# ── Forecasting & Time Series ─────────────────────────────────────────────────
+statsmodels>=0.14.0
+scikit-learn>=1.3.0
+lightgbm>=4.1.0
+
+# ── Conformal Prediction (Module 3) ──────────────────────────────────────────
+mapie>=0.7.0
+
+# ── Causal Discovery (Module 4) ───────────────────────────────────────────────
+dowhy==0.8
+networkx>=3.1
+
+# ── Reinforcement Learning (Module 5) ────────────────────────────────────────
+# supersuit pulls tinyscaler which needs C++ compiler — skip it
+# pettingzoo alone is sufficient for our QMIX environment
+gymnasium>=0.29.0
+pettingzoo>=1.24.0
+stable-baselines3>=2.2.0
+# supersuit      ← REMOVED: pulls tinyscaler (needs Microsoft C++ Build Tools)
+
+# ── Explainability ────────────────────────────────────────────────────────────
+shap>=0.43.0
+
+# ── Geospatial ────────────────────────────────────────────────────────────────
+geopandas>=0.14.0
+shapely>=2.0.0
+folium>=0.15.0
+pyproj>=3.6.0
+
+# ── Data & Visualization ──────────────────────────────────────────────────────
+requests>=2.31.0
+tqdm>=4.66.0
+streamlit>=1.28.0
+plotly>=5.18.0
+matplotlib>=3.8.0
+seaborn>=0.13.0
+
+# ── Utilities ─────────────────────────────────────────────────────────────────
+pyyaml>=6.0.1
+python-dotenv>=1.0.0
+loguru>=0.7.2

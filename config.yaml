@@ -1,0 +1,111 @@
+# AquaIntel — Master Configuration
+# All modules read from this file via utils/config.py
+
+project:
+  name: "AquaIntel"
+  version: "1.0.0"
+  region: "ganges_brahmaputra"
+  seed: 42
+
+# ── Geographic Region ──────────────────────────────────────────────
+region:
+  name: "Ganges-Brahmaputra Basin"
+  lat_min: 21.0
+  lat_max: 31.0
+  lon_min: 73.0
+  lon_max: 97.0
+  # 20 monitoring nodes (stations + sub-basins)
+  num_nodes: 20
+  crs: "EPSG:4326"
+
+# ── Data Paths ─────────────────────────────────────────────────────
+paths:
+  raw_data:    "data/raw/"
+  processed:   "data/processed/"
+  models:      "models/checkpoints/"
+  results:     "models/results/"
+  logs:        "logs/"
+
+# ── Module 1: T-GNN Data Fusion ───────────────────────────────────
+tgnn:
+  hidden_dim: 128
+  num_layers: 4
+  num_heads: 8
+  dropout: 0.1
+  edge_threshold: 0.3        # Minimum correlation to create graph edge
+  temporal_window: 24        # Months of history per graph snapshot
+  batch_size: 32
+  lr: 0.001
+  epochs: 100
+  features:
+    - "groundwater_anomaly"  # GRACE-FO
+    - "precipitation"        # CHIRPS
+    - "temperature"          # ERA5
+    - "evapotranspiration"   # ERA5
+    - "soil_moisture"        # ERA5
+    - "river_discharge"      # India WRIS
+    - "reservoir_level"      # India WRIS
+    - "population_density"   # WorldPop
+    - "irrigation_demand"    # FAO
+
+# ── Module 2: Mamba SSM Forecasting ──────────────────────────────
+mamba:
+  d_model: 256
+  d_state: 64               # SSM state dimension
+  d_conv: 4                 # Local convolution width
+  expand: 2                 # Block expansion factor
+  num_layers: 6
+  dropout: 0.1
+  forecast_horizons: [30, 90, 365]   # Days ahead
+  sequence_length: 365               # Input sequence (days)
+  batch_size: 16
+  lr: 0.0005
+  epochs: 150
+  target: "water_stress_index"       # CWSI (0–1 scale)
+
+# ── Module 3: Conformal Prediction ───────────────────────────────
+conformal:
+  alpha: 0.1                # Miscoverage rate (90% coverage)
+  calibration_split: 0.2   # Fraction of data for calibration set
+  method: "cqr"            # Conformalized Quantile Regression
+  quantiles: [0.05, 0.50, 0.95]
+
+# ── Module 4: NOTEARS Causal Discovery ───────────────────────────
+causal:
+  max_iter: 100
+  h_tol: 1e-8              # DAG constraint tolerance
+  rho_max: 1e16
+  w_threshold: 0.3         # Edge weight pruning threshold
+  lambda1: 0.01            # L1 sparsity penalty
+  causal_variables:
+    - "groundwater_anomaly"
+    - "precipitation"
+    - "temperature"
+    - "evapotranspiration"
+    - "population_growth"
+    - "irrigation_demand"
+    - "deforestation_rate"
+    - "water_stress_index"
+
+# ── Module 5: MARL Intervention Optimizer ────────────────────────
+marl:
+  algorithm: "QMIX"
+  num_agents: 3             # Agriculture, Industry, Municipal
+  state_dim: 16
+  action_dim: 5             # Allocation percentages (discretized)
+  reward_weights:
+    efficiency: 0.4
+    equity: 0.3
+    sustainability: 0.3
+  gamma: 0.99
+  lr: 0.0003
+  batch_size: 64
+  buffer_size: 100000
+  train_steps: 500000
+  mixing_embed_dim: 32      # QMIX hypernetwork dimension
+
+# ── Dashboard ─────────────────────────────────────────────────────
+dashboard:
+  port: 8501
+  theme: "dark"
+  update_interval_sec: 30
