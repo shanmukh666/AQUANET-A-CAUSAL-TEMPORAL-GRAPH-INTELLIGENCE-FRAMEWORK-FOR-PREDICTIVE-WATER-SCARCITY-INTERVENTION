@@ -1,0 +1,2 @@
+# AQUANET-A-CAUSAL-TEMPORAL-GRAPH-INTELLIGENCE-FRAMEWORK-FOR-PREDICTIVE-WATER-SCARCITY-INTERVENTION
+AquaNet is an AI-powered water scarcity forecasting framework that integrates Temporal GNNs, Mamba SSMs, and causal AI to predict water availability up to one year ahead. It identifies key scarcity drivers and recommends optimal water allocation strategies through an interactive decision-support dashboard.
